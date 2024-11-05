@@ -1,0 +1,30 @@
+1 2 3
+
+Zaluceanu Mihaela 334CC
+
+1. Procesul de comutare.
+    La primirea unui cadru (frame) Ethernet, switch-ul aplică un algoritm simplu
+pentru a lega o adresa MAC de un port. Acesta introduce în tabela de comutare o
+intrare care leagă, dacă este cazul, portul (interfața) pe care a sosit cadrul cu
+adresa MAC sursă din antetul (header-ul) Ethernet. Dacă nu există o intrare în
+tabela de comutare pentru adresa MAC destinație, atunci switch-ul va transmite
+cadrul pe toate celelalte porturi.
+    Am folosit pseudocodul oferit de teoria temei.
+
+2. VLAN.
+    Pentru realizarea părții de VLAN, mi-am luat un dictionar în care rețin
+perechea {interface : vlan_id}.
+Modific algoritmul de la 1. Procesul de comutare pentru a mă asigura că frame-urile
+primite sunt redirecționate pe VLAN-urile corecte: rețin portul de in și out al
+cadrului pentru a stabili când și dacă se adaugă/scoate VLAN tag-ul.
+    - vine pe trunk, iese pe trunk => trimit cadrul nemodificat;
+    - vine pe trunk, iese pe access => elimin VLAN tag-ul;
+    - vine pe access, iese pe trunk => adaug VLAN tag-ul;
+    - vine pe access, iese pe access => trimit cadrul nemodificat;
+
+3. STP.
+    Pentru implementarea parții de STP, am utilizat pseudocodurile oferite de enunțul
+temei.
+Pentru a asigura evitarea broadcast storm-ului, când verific tipul interfeței ca să
+știu cum redirecționez cadrul (cu sau fără VLAN tag), mai verific să nu trimit și pe
+porturile BLOCKED.
